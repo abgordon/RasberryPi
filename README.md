@@ -15,3 +15,9 @@ Pin 3:  X               |
 pin 4:  GND  -----------|--GND
 ```
 ```python dht22_read.py```
+
+Websocket dependencies:
+```
+sudo pip install tornado
+sudo pip install websocket-client
+```
