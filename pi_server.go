@@ -13,8 +13,7 @@ import (
 	"net/http"
 	"github.com/gorilla/websocket"
 	"fmt"
-    "net/url"
-    "github.com/influxdb/influxdb/client/v2"
+    client "github.com/influxdb/influxdb/client/v2"
     "time"
 )
 
@@ -41,15 +40,14 @@ var upgrader = websocket.Upgrader{} // use default options
 
 func echo(w http.ResponseWriter, r *http.Request) {
     
-    //Influx init
-    u,err := url.Parse("http://localhost:8086")
+    influx_c,err := client.NewHTTPClient(client.HTTPConfig{
+        Addr: "http://localhost:8086",
+        Username: username,
+        Password: password,
+    })
+
     checkError(err)
-    influx_c := client.NewClient(client.Config{
-            URL: u,
-            Username: username,
-            Password: password,
-     })
-    bp,err := client.NewBatchPoints(client.BatchPointsConfig{
+     bp,err := client.NewBatchPoints(client.BatchPointsConfig{
         Database:  MyDB,
         Precision: "s",
     })
