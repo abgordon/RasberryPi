@@ -32,7 +32,7 @@ func checkError(err error) {
 	}
 }
 
-var addr = flag.String("addr", "localhost:8080", "http service address")
+var addr = flag.String("addr", "0.0.0.0:8080", "http service address")
 
 var upgrader = websocket.Upgrader{} // use default options
 
@@ -40,16 +40,16 @@ func echo(w http.ResponseWriter, r *http.Request) {
 
 	InfluxC, err := client.NewHTTPClient(client.HTTPConfig{
 		Addr:     "http://0.0.0.0:8086",
-		Username: username,
-		Password: password,
+		Username: Username,
+		Password: Password,
 	})
 
 	checkError(err)
 	bp, err := client.NewBatchPoints(client.BatchPointsConfig{
-		Database:  MyDB,
+		Database:  MyDb,
 		Precision: "s",
 	})
-	tags := map[string]string{"my_sensor_id": my_sensor_id}
+	tags := map[string]string{"my_sensor_id": MySensorID}
 	//end influx init
 
 	c, err := upgrader.Upgrade(w, r, nil)
