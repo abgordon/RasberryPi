@@ -19,13 +19,11 @@ import (
 )
 
 const (
-	MyDB        = "horn"
+	MyDb        = "horn"
 	Measurement = "random_numbers"
-
-	username        = "andawg69"
-	password        = "treats123"
-	GOOGLE_CLOUD_IP = "104.197.33.193"
-	my_sensor_id    = "1234569696969"
+	Username    = "andawg69"
+	Password    = "treats123"
+	MySensorID  = "1234569696969"
 )
 
 func checkError(err error) {
@@ -40,8 +38,8 @@ var upgrader = websocket.Upgrader{} // use default options
 
 func echo(w http.ResponseWriter, r *http.Request) {
 
-	influx_c, err := client.NewHTTPClient(client.HTTPConfig{
-		Addr:     "http://localhost:8086",
+	InfluxC, err := client.NewHTTPClient(client.HTTPConfig{
+		Addr:     "http://0.0.0.0:8086",
 		Username: username,
 		Password: password,
 	})
@@ -74,10 +72,10 @@ func echo(w http.ResponseWriter, r *http.Request) {
 		fields := map[string]interface{}{
 			"random_int": message,
 		}
-		pt, err := client.NewPoint("random_numbers", tags, fields, time.Now())
+		pt, err := client.NewPoint(Measurement, tags, fields, time.Now())
 		checkError(err)
 		bp.AddPoint(pt)
-		influx_c.Write(bp)
+		InfluxC.Write(bp)
 
 		err = c.WriteMessage(mt, message)
 		if err != nil {

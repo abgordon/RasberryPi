@@ -7,28 +7,25 @@ import logging
 
 logging.basicConfig()
 
+ip = "104.154.67.221"
+port = "8080"
 
 class WSClient():
 
     def __init__(self):
-        print "init..."
         websocket.enableTrace(False)
-        print "Connecting to ws://104.154.67.221:8080..."
-        self.ws = websocket.WebSocketApp("ws://104.154.67.221:8080",
+        print "Connecting to ws://" + ip + ":" + port +"..."
+        self.ws = websocket.WebSocketApp("ws://" + ip + ":" + port,
         on_message = self.on_message,
         on_error = self.on_error,
         on_close = self.on_close)
-        print "Done."
         self.ws.on_open = self.on_open
-        print "Websocket open"
         self.ws.run_forever()
-        print "Websocket running forever"
 
-        # self.ws.send(u"Hello, world!".encode('utf8'))
-        self.ws.send("Huggaw, world!")
+        self.ws.send("Successfully connected.")
 
     def on_message(self, ws, message):
-        print "got me a message:", message, ws
+        print "rcvd:", message, ws
 
     def on_error(self, ws, error):
         print error
@@ -41,7 +38,7 @@ class WSClient():
 
         while True:
             time.sleep(1)
-            self.ws.send("Huggaw, world!")
+            self.ws.send("Test msg")
 
 
 if __name__ == "__main__":

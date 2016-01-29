@@ -3,7 +3,7 @@ Web Sockets and sensors, for linux/Pi!
 
 Directions:
 
-Start PiGPIO daemon with ```sudo pigpiod```
+Start PiGPIO daemon on RasberryPi with ```sudo pigpiod```
 
 ```
 Pin 1: 3v3------|-------|--3v3 source
@@ -20,4 +20,5 @@ Websocket dependencies:
 ```
 sudo pip install tornado
 sudo pip install websocket-client
+go get
 ```
