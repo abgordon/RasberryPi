@@ -13,8 +13,6 @@ ip = "104.197.37.118"
 port = "8080"
 endpoint = "echo"
 
-pi = pigpio.pi()
-s = DHT22.sensor(pi, 22, LED=16, power=8)
 
 #Simple web socket class
 class WSClient():
@@ -64,11 +62,13 @@ class WSClient():
 
           time.sleep(next_reading-time.time()) # Overall INTERVAL second polling.
 
-          s.cancel()
+        s.cancel()
 
-          pi.stop()
+        pi.stop()
 
 
 
 if __name__ == "__main__":
+    pi = pigpio.pi()
+    s = DHT22.sensor(pi, 22, LED=16, power=8)
     client = WSClient()
