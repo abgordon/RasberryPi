@@ -7,31 +7,30 @@ import time
 import atexit
 import pigpio
 import DHT22
+
+
 logging.basicConfig()
-
-
-
-CLOUD_IP = "104.197.37.118"
-PORT = "8080"
+ip = "104.197.37.118"
+port = "8080"
+endpoint = "echo"
 
 #Simple web socket class
 class WSClient():
 
     def __init__(self):
         websocket.enableTrace(True)
-        self.ws = websocket.WebSocketApp("ws://" + CLOUD_IP + ":" + PORT,
+        print "Connecting to ws://" + ip + ":" + port + "/" + endpoint + "..."
+        self.ws = websocket.WebSocketApp("ws://" + ip + ":" + port + "/" + endpoint,
         on_message = self.on_message,
         on_error = self.on_error,
         on_close = self.on_close)
         self.ws.on_open = self.on_open
+        print "successfully connected."
         self.ws.run_forever()
 
 
-    '''
-        TODO: On receive message, restart program with new wifi password
-    '''
     def on_message(self, ws, message):
-        print "Received Message", message, ws
+        print "rcvd:", message, ws
 
     def on_error(self, ws, error):
         print error
@@ -40,10 +39,14 @@ class WSClient():
         print "connection closed"
 
     def on_open(self, ws):
-        print "Connected to IP adress " + CLOUD_IP + " on port " + PORT
-	while True:
-		time.sleep(1)
-		print 'test msg'
+        print "connected"
+
+        while True:
+            time.sleep(1)
+            msg = "test msg"
+            print msg #see whats going out
+            self.ws.send(msg)
+
 # 2014-07-11 DHT22.py
 class sensor:
    """
@@ -252,7 +255,7 @@ class sensor:
 
 if __name__ == "__main__":
 
-   
+
    client = WSClient()
    message = ""
 
