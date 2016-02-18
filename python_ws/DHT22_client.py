@@ -6,19 +6,20 @@ import logging
 import time
 import atexit
 import pigpio
+import DHT22
 logging.basicConfig()
 
 
 
-CLOUD_IP = "104.197.33.193"
-PORT = "8888"
+CLOUD_IP = "104.197.37.118"
+PORT = "8080"
 
 #Simple web socket class
 class WSClient():
 
     def __init__(self):
-        websocket.enableTrace(False)
-        self.ws = websocket.WebSocketApp("http://" + CLOUD_IP + ":" + PORT,
+        websocket.enableTrace(True)
+        self.ws = websocket.WebSocketApp("ws://" + CLOUD_IP + ":" + PORT,
         on_message = self.on_message,
         on_error = self.on_error,
         on_close = self.on_close)
@@ -40,8 +41,9 @@ class WSClient():
 
     def on_open(self, ws):
         print "Connected to IP adress " + CLOUD_IP + " on port " + PORT
-
-
+	while True:
+		time.sleep(1)
+		print 'test msg'
 # 2014-07-11 DHT22.py
 class sensor:
    """
@@ -250,10 +252,7 @@ class sensor:
 
 if __name__ == "__main__":
 
-   import time
-   import pigpio
-   import DHT22
-
+   
    client = WSClient()
    message = ""
 
@@ -288,7 +287,7 @@ if __name__ == "__main__":
          s.sensor_resets()))
 
 
-      self.ws.send(message)
+      client.ws.send(message)
 
       next_reading += INTERVAL
 
@@ -297,7 +296,3 @@ if __name__ == "__main__":
    s.cancel()
 
    pi.stop()
-
-
-if __name__ == "__main__":
-    client = WSClient()

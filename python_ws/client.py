@@ -6,14 +6,14 @@ import time
 import logging
 
 logging.basicConfig()
-ip = "104.154.67.221"
+ip = "104.197.37.118"
 port = "8080"
 endpoint = "echo"
 
 class WSClient():
 
     def __init__(self):
-        websocket.enableTrace(False)
+        websocket.enableTrace(True)
         print "Connecting to ws://" + ip + ":" + port + "/" + endpoint + "..."
         self.ws = websocket.WebSocketApp("ws://" + ip + ":" + port + "/" + endpoint,
         on_message = self.on_message,
