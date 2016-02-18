@@ -40,11 +40,6 @@ class WSClient():
     def on_open(self, ws):
         print "connected"
 
-        while True:
-            time.sleep(1)
-            msg = "test msg"
-            print msg #see whats going out
-            self.ws.send(msg)
 
 
 if __name__ == "__main__":
@@ -55,6 +50,7 @@ if __name__ == "__main__":
 
    import DHT22
 
+   client = WSClient()
 
 
    # Intervals of about 2 seconds or less will eventually hang the DHT22.
