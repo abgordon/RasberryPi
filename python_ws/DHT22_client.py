@@ -6,7 +6,7 @@ import logging
 import time
 import atexit
 import pigpio
-import DHT22
+import dht22
 
 logging.basicConfig()
 ip = "104.197.37.118"
@@ -43,7 +43,8 @@ class WSClient():
         # Intervals of about 2 seconds or less will eventually hang the DHT22.
         INTERVAL=3
 
-
+    	pi = pigpio.pi()
+    	s = dht22.sensor(pi, 22, LED=16, power=8)
         r = 0
 
         next_reading = time.time()
@@ -69,6 +70,4 @@ class WSClient():
 
 
 if __name__ == "__main__":
-    pi = pigpio.pi()
-    s = DHT22.sensor(pi, 22, LED=16, power=8)
     client = WSClient()
