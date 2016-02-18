@@ -12,12 +12,10 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"net/url"
 	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/influxdb/influxdb/client/v2"
-	"github.com/pi_server/go_ws"
 )
 
 const (
@@ -41,17 +39,15 @@ var upgrader = websocket.Upgrader{} // use default options
 
 func echo(w http.ResponseWriter, r *http.Request) {
 
-	u, _ := url.Parse(INFLUX_URL_LOCAL)
-	out.Println("Connected to", u)
 
-	influx_c, err := client.NewHTTPClient(client.HTTPConfig{
+	InfluxC, err := client.NewHTTPClient(client.HTTPConfig{
 		Addr:     INFLUX_URL_LOCAL,
 		Username: USER,
 		Password: AUTH,
 	})
 	checkError(err)
 	bp, err := client.NewBatchPoints(client.BatchPointsConfig{
-		Database:  influx.DB,
+		Database:  DB,
 		Precision: "ns",
 	})
 	checkError(err)
