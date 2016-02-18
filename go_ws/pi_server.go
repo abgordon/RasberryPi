@@ -44,8 +44,8 @@ func echo(w http.ResponseWriter, r *http.Request) {
 	u, _ := url.Parse(INFLUX_URL_LOCAL)
 	out.Println("Connected to", u)
 
-	InfluxC, err := client.NewClient(client.Config{
-		URL:      u,
+	influx_c, err := client.NewHTTPClient(client.HTTPConfig{
+		Addr:     INFLUX_URL_LOCAL,
 		Username: USER,
 		Password: AUTH,
 	})
