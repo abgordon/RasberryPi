@@ -56,8 +56,9 @@ class WSClient():
           s.trigger()
 
           time.sleep(0.2)
-
-          print("{} {} {} {:3.2f} {} {} {} {}".format(r, s.humidity(), s.temperature(), s.staleness(),s.bad_checksum(), s.short_message(), s.missing_message(),s.sensor_resets()))
+          message = "{} {} {} {:3.2f} {} {} {} {}".format(r, s.humidity(), s.temperature(), s.staleness(),s.bad_checksum(), s.short_message(), s.missing_message(),s.sensor_resets())
+          print(message)
+          ws.send(message)
 
           next_reading += INTERVAL
 
