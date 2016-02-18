@@ -19,11 +19,11 @@ import (
 )
 
 const (
-	MyDb        = "horn"
-	Measurement = "random_numbers"
-	Username    = "andawg69"
-	Password    = "treats123"
-	MySensorID  = "1234569696969"
+	MyDb        = "sensor_data"
+	Measurement = "sensor_house"
+	Username    = "sensor_root"
+	Password    = "horn"
+	MySensorID  = "basement_1"
 )
 
 func checkError(err error) {
@@ -49,7 +49,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 		Database:  MyDb,
 		Precision: "s",
 	})
-	tags := map[string]string{"my_sensor_id": MySensorID}
+	tags := map[string]string{"s_id": MySensorID}
 	//end influx init
 
 	c, err := upgrader.Upgrade(w, r, nil)
@@ -70,7 +70,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 		   write to influx here
 		*/
 		fields := map[string]interface{}{
-			"random_int": message,
+			"reading_raw": message,
 		}
 		pt, err := client.NewPoint(Measurement, tags, fields, time.Now())
 		checkError(err)
