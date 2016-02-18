@@ -255,9 +255,12 @@ class sensor:
 
 if __name__ == "__main__":
 
+   import time
 
-   client = WSClient()
-   message = ""
+   import pigpio
+
+   import DHT22
+
 
    # Intervals of about 2 seconds or less will eventually hang the DHT22.
    INTERVAL=3
@@ -278,19 +281,10 @@ if __name__ == "__main__":
 
       time.sleep(0.2)
 
-
       print("{} {} {} {:3.2f} {} {} {} {}".format(
          r, s.humidity(), s.temperature(), s.staleness(),
          s.bad_checksum(), s.short_message(), s.missing_message(),
          s.sensor_resets()))
-
-      message = ("{}-{}-{}-{:3.2f}-{}-{}-{}-{}".format(
-         r, s.humidity(), s.temperature(), s.staleness(),
-         s.bad_checksum(), s.short_message(), s.missing_message(),
-         s.sensor_resets()))
-
-
-      client.ws.send(message)
 
       next_reading += INTERVAL
 
