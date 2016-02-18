@@ -12,18 +12,21 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/influxdb/influxdb/client/v2"
+	"github.com/pi_server/go_ws"
 )
 
 const (
-	MyDb        = "sensor_data"
-	Measurement = "sensor_house"
-	Username    = "sensor_root"
-	Password    = "horn"
-	MySensorID  = "basement_1"
+	INFLUX_URL_LOCAL = "http://localhost:8086"
+	DB               = "sensor_data"
+	COLLECTION       = "sensor_house"
+	USER             = "sensor_root"
+	AUTH             = "horn"
+	SENSORID         = "basement_1"
 )
 
 func checkError(err error) {
@@ -38,18 +41,22 @@ var upgrader = websocket.Upgrader{} // use default options
 
 func echo(w http.ResponseWriter, r *http.Request) {
 
-	InfluxC, err := client.NewHTTPClient(client.HTTPConfig{
-		Addr:     "http://0.0.0.0:8086",
-		Username: Username,
-		Password: Password,
-	})
+	u, _ := url.Parse(INFLUX_URL_LOCAL)
+	out.Println("Connected to", u)
 
+	InfluxC, err := client.NewClient(client.Config{
+		URL:      u,
+		Username: USER,
+		Password: AUTH,
+	})
 	checkError(err)
 	bp, err := client.NewBatchPoints(client.BatchPointsConfig{
-		Database:  MyDb,
-		Precision: "s",
+		Database:  influx.DB,
+		Precision: "ns",
 	})
-	tags := map[string]string{"s_id": MySensorID}
+	checkError(err)
+
+	tags := map[string]string{"s_id": SENSORID}
 	//end influx init
 
 	c, err := upgrader.Upgrade(w, r, nil)
@@ -72,7 +79,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 		fields := map[string]interface{}{
 			"reading_raw": message,
 		}
-		pt, err := client.NewPoint(Measurement, tags, fields, time.Now())
+		pt, err := client.NewPoint(COLLECTION, tags, fields, time.Now())
 		checkError(err)
 		bp.AddPoint(pt)
 		InfluxC.Write(bp)
